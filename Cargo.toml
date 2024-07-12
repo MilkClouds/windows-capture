@@ -53,6 +53,9 @@ rayon = "1.10.0"
 
 # Error handling
 thiserror = "1.0.61"
+serde = { version = "1.0.204", features = ["derive"] }
+serde_yaml = "0.9.34"
+zmq = "0.10.0"
 
 [package.metadata.docs.rs]
 default-target = "x86_64-pc-windows-msvc"

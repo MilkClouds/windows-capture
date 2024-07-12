@@ -1,0 +1,5 @@
+cursor_capture: true
+draw_border: true
+window_name: "window"
+subscribe_addr: "tcp://127.0.0.1:5555"
+publish_addr: "tcp://127.0.0.1:5556"
