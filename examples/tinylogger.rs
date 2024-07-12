@@ -87,6 +87,7 @@ impl GraphicsCaptureApiHandler for Capture {
                 (*self.flags.video_encoder.lock().unwrap()).take().unwrap().finish()?;
                 // capture_control.stop();
                 println!("\nStopped capturing!");
+                self.start = Instant::now();
             } else {
                 print!(
                     "\rWaiting for: {} seconds",
