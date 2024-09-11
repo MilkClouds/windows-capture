@@ -8,19 +8,21 @@ pub enum ColorFormat {
 }
 
 impl Default for ColorFormat {
+    #[must_use]
+    #[inline]
     fn default() -> Self {
         Self::Rgba8
     }
 }
 
-#[derive(Eq, PartialEq, Clone, Debug)]
+#[derive(Eq, PartialEq, Clone, Copy, Debug)]
 pub enum CursorCaptureSettings {
     Default,
     WithCursor,
     WithoutCursor,
 }
 
-#[derive(Eq, PartialEq, Clone, Debug)]
+#[derive(Eq, PartialEq, Clone, Copy, Debug)]
 pub enum DrawBorderSettings {
     Default,
     WithBorder,
@@ -31,15 +33,15 @@ pub enum DrawBorderSettings {
 /// Represents the settings for screen capturing.
 pub struct Settings<Flags, T: TryInto<GraphicsCaptureItem>> {
     /// The graphics capture item to capture.
-    pub item: T,
+    pub(crate) item: T,
     /// Specifies whether to capture the cursor.
-    pub cursor_capture: CursorCaptureSettings,
+    pub(crate) cursor_capture: CursorCaptureSettings,
     /// Specifies whether to draw a border around the captured region.
-    pub draw_border: DrawBorderSettings,
+    pub(crate) draw_border: DrawBorderSettings,
     /// The color format for the captured graphics.
-    pub color_format: ColorFormat,
+    pub(crate) color_format: ColorFormat,
     /// Additional flags for capturing graphics.
-    pub flags: Flags,
+    pub(crate) flags: Flags,
 }
 
 impl<Flags, T: TryInto<GraphicsCaptureItem>> Settings<Flags, T> {
@@ -52,6 +54,8 @@ impl<Flags, T: TryInto<GraphicsCaptureItem>> Settings<Flags, T> {
     /// * `draw_border` - Whether to draw a border around the captured region or not.
     /// * `color_format` - The desired color format for the captured frame.
     /// * `flags` - Additional flags for the capture settings that will be passed to user defined `new` function.
+    #[must_use]
+    #[inline]
     pub const fn new(
         item: T,
         cursor_capture: CursorCaptureSettings,
@@ -66,5 +70,60 @@ impl<Flags, T: TryInto<GraphicsCaptureItem>> Settings<Flags, T> {
             color_format,
             flags,
         }
+    }
+
+    /// Get the item
+    ///
+    /// # Returns
+    ///
+    /// The item to be captured
+    #[must_use]
+    #[inline]
+    pub const fn item(&self) -> &T {
+        &self.item
+    }
+
+    /// Get the cursor capture settings
+    ///
+    /// # Returns
+    ///
+    /// The cursor capture settings
+    #[must_use]
+    #[inline]
+    pub const fn cursor_capture(&self) -> CursorCaptureSettings {
+        self.cursor_capture
+    }
+
+    /// Get the draw border settings
+    ///
+    /// # Returns
+    ///
+    /// The draw border settings
+    #[must_use]
+    #[inline]
+    pub const fn draw_border(&self) -> DrawBorderSettings {
+        self.draw_border
+    }
+
+    /// Get the color format
+    ///
+    /// # Returns
+    ///
+    /// The color format
+    #[must_use]
+    #[inline]
+    pub const fn color_format(&self) -> ColorFormat {
+        self.color_format
+    }
+
+    /// Get the flags
+    ///
+    /// # Returns
+    ///
+    /// The flags
+    #[must_use]
+    #[inline]
+    pub const fn flags(&self) -> &Flags {
+        &self.flags
     }
 }

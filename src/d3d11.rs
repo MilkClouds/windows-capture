@@ -39,6 +39,8 @@ impl<T> SendDirectX<T> {
     /// # Returns
     ///
     /// Returns A New `SendDirectX` Instance
+    #[must_use]
+    #[inline]
     pub const fn new(device: T) -> Self {
         Self(device)
     }
@@ -48,6 +50,7 @@ impl<T> SendDirectX<T> {
 unsafe impl<T> Send for SendDirectX<T> {}
 
 /// Create `ID3D11Device` and `ID3D11DeviceContext`
+#[inline]
 pub fn create_d3d_device() -> Result<(ID3D11Device, ID3D11DeviceContext), Error> {
     // Array of Direct3D feature levels.
     // The feature levels are listed in descending order of capability.
@@ -80,7 +83,7 @@ pub fn create_d3d_device() -> Result<(ID3D11Device, ID3D11DeviceContext), Error>
         )?;
     };
 
-    if feature_level != D3D_FEATURE_LEVEL_11_1 {
+    if feature_level.0 < D3D_FEATURE_LEVEL_11_0.0 {
         return Err(Error::FeatureLevelNotSatisfied);
     }
 
@@ -88,6 +91,7 @@ pub fn create_d3d_device() -> Result<(ID3D11Device, ID3D11DeviceContext), Error>
 }
 
 /// Create `IDirect3DDevice` From `ID3D11Device`
+#[inline]
 pub fn create_direct3d_device(d3d_device: &ID3D11Device) -> Result<IDirect3DDevice, Error> {
     let dxgi_device: IDXGIDevice = d3d_device.cast()?;
     let inspectable = unsafe { CreateDirect3D11DeviceFromDXGIDevice(&dxgi_device)? };
