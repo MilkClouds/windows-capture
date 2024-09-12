@@ -13,12 +13,12 @@ class CaptureClient:
         # Setup publisher to send commands to the server
         self.publisher = self.context.socket(zmq.PUB)
         self.publisher.bind(self.server_address)
+        time.sleep(1)  # sleep for bind
 
         # Setup subscriber to receive responses from the server
         self.subscriber = self.context.socket(zmq.SUB)
         self.subscriber.connect(self.pub_address)
         self.subscriber.setsockopt_string(zmq.SUBSCRIBE, "")
-        time.sleep(1)
 
     def start_recording(self, video_name, fps, width, height):
         self.publisher.send_string("start", zmq.SNDMORE)
